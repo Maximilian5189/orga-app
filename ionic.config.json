@@ -1,0 +1,7 @@
+{
+  "name": "orga-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
