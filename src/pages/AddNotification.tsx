@@ -5,7 +5,6 @@ import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
 import { FieldTypes } from '../model/Fieldtypes';
 
-// todo: Daten persistieren -> Browser in localStorage; wie für mobile?
 const AddNotification: React.FC<{
   notifications: LocalNotificationCustom[],
   setNotifications: Dispatch<SetStateAction<LocalNotificationCustom[]>>
@@ -47,6 +46,7 @@ const AddNotification: React.FC<{
     newNotificationArray.push(notification);
     newNotificationArray.sort((a, b) => Number(a.schedule?.at) - Number(b.schedule?.at));
     props.setNotifications(newNotificationArray);
+    Plugins.Storage.set({key: 'notifications', value: JSON.stringify(newNotificationArray)})
 
     await Plugins.LocalNotifications.schedule({
       notifications: [

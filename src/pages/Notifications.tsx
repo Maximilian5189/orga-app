@@ -1,15 +1,17 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonText, IonCheckbox, IonItem, IonList } from '@ionic/react';
 import { add } from 'ionicons/icons';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
 import { scheduleNotification, cancelNotifcation } from '../functions/functions';
+import { Plugins } from '@capacitor/core';
 
 const Notifications: React.FC<{
   notifications: LocalNotificationCustom[],
   setNotifications: Dispatch<SetStateAction<LocalNotificationCustom[]>>
 }> = props => {
   const history = useHistory();
+  const { setNotifications } = props;
 
   function toggleNotificationDoneStatus(notificationTobeCanceledOrRevoked: LocalNotificationCustom) {
     if (notificationTobeCanceledOrRevoked.done === true) {
@@ -28,7 +30,16 @@ const Notifications: React.FC<{
       history.push(`/notifications/notificationdetails/${notification.id}`)
     }
   }
-  
+
+  useEffect(() => {
+    async function getAndSetNotificationsFromStorage() {
+      const newNotificationArrayPromise = await Plugins.Storage.get({key: 'notifications'})
+      const newNotificationArray = newNotificationArrayPromise.value ? JSON.parse(newNotificationArrayPromise.value) : [];
+      setNotifications(newNotificationArray);
+    }
+    getAndSetNotificationsFromStorage()
+  }, [setNotifications])
+
   return (
     <IonPage>
       <IonHeader>

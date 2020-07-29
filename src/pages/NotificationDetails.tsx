@@ -4,6 +4,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBa
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { FieldTypes } from '../model/Fieldtypes';
 import { rescheduleNotification, cancelNotifcation } from '../functions/functions';
+import { Plugins } from '@capacitor/core';
 
 const NotificationDetails: React.FC<{
   notifications: LocalNotificationCustom[],
@@ -33,6 +34,7 @@ const NotificationDetails: React.FC<{
       return notification
     })
     props.setNotifications(newNotificationArray)
+    Plugins.Storage.set({key: 'notifications', value: JSON.stringify(newNotificationArray)})
   }
 
   function deleteNotification() {
@@ -40,6 +42,7 @@ const NotificationDetails: React.FC<{
       if (notification.id.toString() === notificationId) {
         const newNotificationArray = props.notifications.slice(index, index)
         props.setNotifications(newNotificationArray)
+        Plugins.Storage.set({key: 'notifications', value: JSON.stringify(newNotificationArray)})
         cancelNotifcation(notification);
       }
     });
