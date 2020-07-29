@@ -1,6 +1,5 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonList, IonItem, IonLabel, IonInput, IonDatetime, IonSelect, IonSelectOption, IonButtons, IonBackButton } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import { Plugins } from '@capacitor/core';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
@@ -14,6 +13,7 @@ const AddNotification: React.FC<{
 
   const [userInput, setUserInput] = useState<LocalNotificationCustom>({title: '', body: '', id: 0, done: false});
   const history = useHistory();
+  const [notificationDateString, setNotificationDateString] = useState('');
 
   function handleUserInput(e: CustomEvent, fieldName: FieldTypes) {
     if (e.detail && e.detail.value) {
@@ -22,6 +22,7 @@ const AddNotification: React.FC<{
       } else if (fieldName === FieldTypes.BODY) {
         setUserInput({...userInput, body: e.detail.value})
       } else if (fieldName === FieldTypes.DATE) {
+        setNotificationDateString(e.detail.value);
         e.detail.value = new Date(e.detail.value)
         setUserInput({...userInput, schedule: { at: e.detail.value }})
       } else if (fieldName === FieldTypes.REPEAT) {
@@ -40,12 +41,12 @@ const AddNotification: React.FC<{
       body: userInput.body,
       schedule: { at: userInput.schedule?.at, repeats: userInput.schedule?.repeats, every: userInput.schedule?.every },
       done: userInput.done
-    }
+    };
     
     const newNotificationArray = props.notifications.slice();
     newNotificationArray.push(notification);
-    newNotificationArray.sort((a, b) => Number(a.schedule?.at) - Number(b.schedule?.at))
-    props.setNotifications(newNotificationArray)
+    newNotificationArray.sort((a, b) => Number(a.schedule?.at) - Number(b.schedule?.at));
+    props.setNotifications(newNotificationArray);
 
     await Plugins.LocalNotifications.schedule({
       notifications: [
@@ -53,7 +54,9 @@ const AddNotification: React.FC<{
       ]
     });
 
-    history.push("/notifications")
+    setNotificationDateString('');
+    setUserInput({title: '', body: '', id: 0, done: false});
+    history.push("/notifications");
   }
 
   return (
@@ -72,23 +75,22 @@ const AddNotification: React.FC<{
             <IonTitle size="large">Erinnerungen</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Erinnerungen" />
         <IonList>
           <IonItem>
             <IonLabel position="floating">Titel</IonLabel>
-            <IonInput type="text" onIonChange={e => handleUserInput(e, FieldTypes.TITLE)}></IonInput>
+            <IonInput type="text" value={userInput.title} onIonChange={e => handleUserInput(e, FieldTypes.TITLE)}></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Details</IonLabel>
-            <IonInput type="text" onIonChange={e => handleUserInput(e, FieldTypes.BODY)}></IonInput>
+            <IonInput type="text" value={userInput.body} onIonChange={e => handleUserInput(e, FieldTypes.BODY)}></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Zeitpunkt (DD/MM/YYYY HH:mm)</IonLabel>
-            <IonDatetime displayFormat="DD MM YYYY HH:mm" cancel-text="Abbrechen" done-text="Fertig" max="2100" onIonChange={e => handleUserInput(e, FieldTypes.DATE)}></IonDatetime>
+            <IonDatetime displayFormat="DD MM YYYY HH:mm" cancel-text="Abbrechen" done-text="Fertig" max="2100" value={notificationDateString} onIonChange={e => handleUserInput(e, FieldTypes.DATE)}></IonDatetime>
           </IonItem>
           <IonItem>
           <IonLabel position="floating">Wiederholen?</IonLabel>
-            <IonSelect placeholder="Wähle eins aus" onIonChange={e => handleUserInput(e, FieldTypes.REPEAT)}>
+            <IonSelect placeholder="Wähle eins aus" value={userInput.schedule?.every} onIonChange={e => handleUserInput(e, FieldTypes.REPEAT)}>
               <IonSelectOption value="hour">Stündlich</IonSelectOption>
               <IonSelectOption value="day">Täglich</IonSelectOption>
               <IonSelectOption value="">Nein</IonSelectOption>

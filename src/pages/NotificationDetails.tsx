@@ -17,6 +17,7 @@ const NotificationDetails: React.FC<{
   const history = useHistory();
 
   function handleUserInput(e: CustomEvent, fieldName: FieldTypes) {
+    console.log(props.notifications)
     const newNotificationArray = props.notifications?.map(notification => {
       if (notification.id.toString() === notificationId) {
         if (fieldName === FieldTypes.DATE && notification.schedule) {
@@ -36,10 +37,9 @@ const NotificationDetails: React.FC<{
     props.setNotifications(newNotificationArray)
   }
 
-  // todo
-  async function rescheduleNotification(notification: LocalNotificationCustom) {
-    await cancelNotifcation(notification);
-    await scheduleNotification(notification);
+  function rescheduleNotification(notification: LocalNotificationCustom) {
+    cancelNotifcation(notification);
+    scheduleNotification(notification);
   }
 
   function cancelNotifcation(notification: LocalNotificationCustom) {

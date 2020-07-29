@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonText, IonCheckbox, IonItem, IonList } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import { Plugins, LocalNotificationRequest, LocalNotificationPendingList } from '@capacitor/core';
 import { add } from 'ionicons/icons';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
@@ -48,7 +47,6 @@ const Notifications: React.FC<{
             <IonTitle size="large">Erinnerungen</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Erinnerungen" />
         <IonList>
           {props.notifications.map((notification) => {
             if (!notification.doneTimestamp || Number(notification.doneTimestamp) + 1000 * 60 * 60 * 24 > Number(new Date())) {
