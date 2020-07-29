@@ -3,9 +3,8 @@ import { useParams, useHistory } from 'react-router';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonList, IonLabel, IonItem, IonInput, IonDatetime, IonSelect, IonSelectOption, IonAlert, IonButton } from '@ionic/react';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { FieldTypes } from '../model/Fieldtypes';
-import { LocalNotificationRequest, LocalNotificationPendingList, Plugins } from '@capacitor/core';
+import { rescheduleNotification, cancelNotifcation } from '../functions/functions';
 
-// todo: refactor noch was möglich? Dann Funktionen auslagern
 const NotificationDetails: React.FC<{
   notifications: LocalNotificationCustom[],
   setNotifications: Dispatch<SetStateAction<LocalNotificationCustom[]>>
@@ -17,7 +16,6 @@ const NotificationDetails: React.FC<{
   const history = useHistory();
 
   function handleUserInput(e: CustomEvent, fieldName: FieldTypes) {
-    console.log(props.notifications)
     const newNotificationArray = props.notifications?.map(notification => {
       if (notification.id.toString() === notificationId) {
         if (fieldName === FieldTypes.DATE && notification.schedule) {
@@ -35,25 +33,6 @@ const NotificationDetails: React.FC<{
       return notification
     })
     props.setNotifications(newNotificationArray)
-  }
-
-  function rescheduleNotification(notification: LocalNotificationCustom) {
-    cancelNotifcation(notification);
-    scheduleNotification(notification);
-  }
-
-  function cancelNotifcation(notification: LocalNotificationCustom) {
-    const localNotificationRequest: LocalNotificationRequest[] = [ { id: notification.id.toString() } ]
-    const localNotificationPendingList: LocalNotificationPendingList = { notifications: localNotificationRequest }
-    Plugins.LocalNotifications.cancel(localNotificationPendingList)
-  }
-
-  function scheduleNotification(notification: LocalNotificationCustom) {
-    Plugins.LocalNotifications.schedule({
-      notifications: [
-        notification
-      ]
-    });
   }
 
   function deleteNotification() {

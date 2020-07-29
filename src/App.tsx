@@ -10,10 +10,9 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { ellipse, triangle } from 'ionicons/icons';
 import Notifications from './pages/Notifications';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import Notes from './pages/Notes';
 import NotificationDetails from './pages/NotificationDetails';
 import LocalNotificationCustom from './model/LocalNotificationCustom';
 
@@ -48,8 +47,7 @@ const App: React.FC = () => {
             <Route path="/notifications" exact={true}>
               <Notifications notifications={notifications} setNotifications={setNotifications}/>
             </Route>
-            <Route path="/tab2" component={Tab2} exact={true} />
-            <Route path="/tab3" component={Tab3} exact={true}/>
+            <Route path="/tab2" component={Notes} exact={true} />
             <Route path="/notifications/notificationdetails/:notificationId" exact={true}>
               <NotificationDetails notifications={notifications} setNotifications={setNotifications} />
             </Route>
@@ -65,11 +63,7 @@ const App: React.FC = () => {
             </IonTabButton>
             <IonTabButton tab="tab2" href="/tab2">
               <IonIcon icon={ellipse} />
-              <IonLabel>Tab 2</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
-              <IonIcon icon={square} />
-              <IonLabel>Tab 3</IonLabel>
+              <IonLabel>Notizen</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

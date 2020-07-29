@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonText, IonCheckbox, IonItem, IonList } from '@ionic/react';
-import { Plugins, LocalNotificationRequest, LocalNotificationPendingList } from '@capacitor/core';
 import { add } from 'ionicons/icons';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
+import { scheduleNotification, cancelNotifcation } from '../functions/functions';
 
 const Notifications: React.FC<{
   notifications: LocalNotificationCustom[],
@@ -11,19 +11,14 @@ const Notifications: React.FC<{
 }> = props => {
   const history = useHistory();
 
-  function toggleNotificationDoneStatus(notificationTobeCanceledOrRevoked: LocalNotificationCustom, event: CustomEvent) {
+  function toggleNotificationDoneStatus(notificationTobeCanceledOrRevoked: LocalNotificationCustom) {
     if (notificationTobeCanceledOrRevoked.done === true) {
       delete notificationTobeCanceledOrRevoked.doneTimestamp;
-      Plugins.LocalNotifications.schedule({
-        notifications: [
-          notificationTobeCanceledOrRevoked
-        ]
-      });
+      scheduleNotification(notificationTobeCanceledOrRevoked);
+
     } else {
       notificationTobeCanceledOrRevoked.doneTimestamp = new Date();
-      const localNotificationRequest: LocalNotificationRequest[] = [ { id: notificationTobeCanceledOrRevoked.id.toString() } ]
-      const localNotificationPendingList: LocalNotificationPendingList = { notifications: localNotificationRequest }
-      Plugins.LocalNotifications.cancel(localNotificationPendingList)
+      cancelNotifcation(notificationTobeCanceledOrRevoked)
     }
     notificationTobeCanceledOrRevoked.done = !notificationTobeCanceledOrRevoked.done
   }
@@ -52,7 +47,7 @@ const Notifications: React.FC<{
             if (!notification.doneTimestamp || Number(notification.doneTimestamp) + 1000 * 60 * 60 * 24 > Number(new Date())) {
               return (
                 <IonItem key={notification.id} button onClick={e => openNotificationDetails(notification, e)}>
-                  <IonCheckbox onIonChange={e => toggleNotificationDoneStatus(notification, e)}/>
+                  <IonCheckbox onIonChange={() => toggleNotificationDoneStatus(notification)}/>
                   <IonText class="ion-margin">{notification.title}</IonText>
                   <IonText slot="end">{notification.schedule?.at?.toLocaleDateString('de-DE', {year: 'numeric', month: 'numeric', day: 'numeric'})}</IonText>
                 </IonItem>
