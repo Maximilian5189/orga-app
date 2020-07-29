@@ -4,7 +4,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import { Plugins } from '@capacitor/core';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
-import { notifications } from 'ionicons/icons';
+import { FieldTypes } from '../model/Fieldtypes';
 
 // todo: Daten persistieren -> Browser in localStorage; wie für mobile?
 const AddNotification: React.FC<{
@@ -12,26 +12,19 @@ const AddNotification: React.FC<{
   setNotifications: Dispatch<SetStateAction<LocalNotificationCustom[]>>
 }> = props => {
 
-  enum fieldTypes {
-    TITLE = 'title',
-    BODY = 'body',
-    DATE = 'date',
-    REPEAT = 'repeat'
-  }
-
   const [userInput, setUserInput] = useState<LocalNotificationCustom>({title: '', body: '', id: 0, done: false});
   const history = useHistory();
 
-  function handleUserInput(e: CustomEvent, fieldName: fieldTypes) {
+  function handleUserInput(e: CustomEvent, fieldName: FieldTypes) {
     if (e.detail && e.detail.value) {
-      if (fieldName === fieldTypes.TITLE) {
+      if (fieldName === FieldTypes.TITLE) {
         setUserInput({...userInput, title: e.detail.value})
-      } else if (fieldName === fieldTypes.BODY) {
+      } else if (fieldName === FieldTypes.BODY) {
         setUserInput({...userInput, body: e.detail.value})
-      } else if (fieldName === fieldTypes.DATE) {
+      } else if (fieldName === FieldTypes.DATE) {
         e.detail.value = new Date(e.detail.value)
         setUserInput({...userInput, schedule: { at: e.detail.value }})
-      } else if (fieldName === fieldTypes.REPEAT) {
+      } else if (fieldName === FieldTypes.REPEAT) {
         const repeats = e.detail.value ? true : false; 
         setUserInput({...userInput, schedule: { every: e.detail.value, repeats: repeats }})
       }
@@ -83,19 +76,19 @@ const AddNotification: React.FC<{
         <IonList>
           <IonItem>
             <IonLabel position="floating">Titel</IonLabel>
-            <IonInput type="text" onIonChange={e => handleUserInput(e, fieldTypes.TITLE)}></IonInput>
+            <IonInput type="text" onIonChange={e => handleUserInput(e, FieldTypes.TITLE)}></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Details</IonLabel>
-            <IonInput type="text" onIonChange={e => handleUserInput(e, fieldTypes.BODY)}></IonInput>
+            <IonInput type="text" onIonChange={e => handleUserInput(e, FieldTypes.BODY)}></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Zeitpunkt (DD/MM/YYYY HH:mm)</IonLabel>
-            <IonDatetime displayFormat="DD MM YYYY HH:mm" cancel-text="Abbrechen" done-text="Fertig" max="2100" onIonChange={e => handleUserInput(e, fieldTypes.DATE)}></IonDatetime>
+            <IonDatetime displayFormat="DD MM YYYY HH:mm" cancel-text="Abbrechen" done-text="Fertig" max="2100" onIonChange={e => handleUserInput(e, FieldTypes.DATE)}></IonDatetime>
           </IonItem>
           <IonItem>
           <IonLabel position="floating">Wiederholen?</IonLabel>
-            <IonSelect placeholder="Wähle eins aus" onIonChange={e => handleUserInput(e, fieldTypes.REPEAT)}>
+            <IonSelect placeholder="Wähle eins aus" onIonChange={e => handleUserInput(e, FieldTypes.REPEAT)}>
               <IonSelectOption value="hour">Stündlich</IonSelectOption>
               <IonSelectOption value="day">Täglich</IonSelectOption>
               <IonSelectOption value="">Nein</IonSelectOption>

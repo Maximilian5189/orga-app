@@ -6,7 +6,6 @@ import { add } from 'ionicons/icons';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
 
-// todo: Daten persistieren -> Browser in localStorage; wie für mobile?
 const Notifications: React.FC<{
   notifications: LocalNotificationCustom[],
   setNotifications: Dispatch<SetStateAction<LocalNotificationCustom[]>>
@@ -14,7 +13,6 @@ const Notifications: React.FC<{
   const history = useHistory();
 
   function toggleNotificationDoneStatus(notificationTobeCanceledOrRevoked: LocalNotificationCustom, event: CustomEvent) {
-    event.stopPropagation();
     if (notificationTobeCanceledOrRevoked.done === true) {
       delete notificationTobeCanceledOrRevoked.doneTimestamp;
       Plugins.LocalNotifications.schedule({
@@ -29,6 +27,12 @@ const Notifications: React.FC<{
       Plugins.LocalNotifications.cancel(localNotificationPendingList)
     }
     notificationTobeCanceledOrRevoked.done = !notificationTobeCanceledOrRevoked.done
+  }
+
+  function openNotificationDetails(notification: LocalNotificationCustom, event: any) {
+    if (event.target.nodeName !== 'ION-CHECKBOX') {
+      history.push(`/notifications/notificationdetails/${notification.id}`)
+    }
   }
   
   return (
@@ -49,8 +53,7 @@ const Notifications: React.FC<{
           {props.notifications.map((notification) => {
             if (!notification.doneTimestamp || Number(notification.doneTimestamp) + 1000 * 60 * 60 * 24 > Number(new Date())) {
               return (
-                // todo: Events kommen sich hier in die Quere
-                <IonItem key={notification.id} onClick={() => history.push(`/notifications/notificationdetails/${notification.id}`)}>
+                <IonItem key={notification.id} button onClick={e => openNotificationDetails(notification, e)}>
                   <IonCheckbox onIonChange={e => toggleNotificationDoneStatus(notification, e)}/>
                   <IonText class="ion-margin">{notification.title}</IonText>
                   <IonText slot="end">{notification.schedule?.at?.toLocaleDateString('de-DE', {year: 'numeric', month: 'numeric', day: 'numeric'})}</IonText>
