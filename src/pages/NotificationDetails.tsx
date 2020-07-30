@@ -38,14 +38,16 @@ const NotificationDetails: React.FC<{
   }
 
   function deleteNotification() {
-    props.notifications?.forEach((notification, index) => {
+    const newNotificationArray: LocalNotificationCustom[] = [];
+    props.notifications.forEach(notification => {
       if (notification.id.toString() === notificationId) {
-        const newNotificationArray = props.notifications.slice(index, index)
-        props.setNotifications(newNotificationArray)
-        Plugins.Storage.set({key: 'notifications', value: JSON.stringify(newNotificationArray)})
         cancelNotifcation(notification);
+      } else {
+        newNotificationArray.push(notification);
       }
     });
+    props.setNotifications(newNotificationArray);
+    Plugins.Storage.set({key: 'notifications', value: JSON.stringify(newNotificationArray)});
   }
 
   useEffect(() => {

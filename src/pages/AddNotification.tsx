@@ -35,7 +35,7 @@ const AddNotification: React.FC<{
     await Plugins.LocalNotifications.requestPermission()
 
     const notification = {      
-      id: props.notifications.length + 1,
+      id: getNewNotificationId(props.notifications),
       title: userInput.title,
       body: userInput.body,
       schedule: { at: userInput.schedule?.at, repeats: userInput.schedule?.repeats, every: userInput.schedule?.every },
@@ -57,6 +57,16 @@ const AddNotification: React.FC<{
     setNotificationDateString('');
     setUserInput({title: '', body: '', id: 0, done: false});
     history.push("/notifications");
+  }
+
+  function getNewNotificationId(notifications: LocalNotificationCustom[]) {
+    let highestExistingId = 0;
+    notifications.forEach(notification => {
+      if (notification.id > highestExistingId) {
+        highestExistingId = notification.id
+      }
+    });
+    return highestExistingId + 1
   }
 
   return (

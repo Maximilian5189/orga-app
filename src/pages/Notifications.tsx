@@ -56,6 +56,9 @@ const Notifications: React.FC<{
         <IonList>
           {props.notifications.map((notification) => {
             if (!notification.doneTimestamp || Number(notification.doneTimestamp) + 1000 * 60 * 60 * 24 > Number(new Date())) {
+              if (typeof notification.schedule?.at === 'string') {
+                notification.schedule.at = new Date(notification.schedule?.at);
+              }
               return (
                 <IonItem key={notification.id} button onClick={e => openNotificationDetails(notification, e)}>
                   <IonCheckbox onIonChange={() => toggleNotificationDoneStatus(notification)}/>
@@ -64,7 +67,7 @@ const Notifications: React.FC<{
                 </IonItem>
               )
             } else {
-              return <React.Fragment></React.Fragment>
+              return <React.Fragment key={notification.id}></React.Fragment>
             }
           })}
         </IonList>
