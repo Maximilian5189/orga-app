@@ -32,12 +32,12 @@ const Notifications: React.FC<{
   }
 
   useEffect(() => {
-    async function getAndSetNotificationsFromStorage() {
+    async function getNotificationsFromStorageAndSetProps() {
       const newNotificationArrayPromise = await Plugins.Storage.get({key: 'notifications'})
       const newNotificationArray = newNotificationArrayPromise.value ? JSON.parse(newNotificationArrayPromise.value) : [];
       setNotifications(newNotificationArray);
     }
-    getAndSetNotificationsFromStorage()
+    getNotificationsFromStorageAndSetProps()
   }, [setNotifications])
 
   return (

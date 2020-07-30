@@ -15,6 +15,10 @@ import Notifications from './pages/Notifications';
 import Notes from './pages/Notes';
 import NotificationDetails from './pages/NotificationDetails';
 import LocalNotificationCustom from './model/LocalNotificationCustom';
+import AddNotification from './pages/AddNotification';
+import Note from './model/Note';
+import AddNote from './pages/AddNote';
+import NoteDetails from './pages/NoteDetails';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,10 +38,10 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import AddNotification from './pages/AddNotification';
 
 const App: React.FC = () => {
   const [notifications, setNotifications] = useState<LocalNotificationCustom[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
 
   return (
     <IonApp>
@@ -47,12 +51,20 @@ const App: React.FC = () => {
             <Route path="/notifications" exact={true}>
               <Notifications notifications={notifications} setNotifications={setNotifications}/>
             </Route>
-            <Route path="/tab2" component={Notes} exact={true} />
             <Route path="/notifications/notificationdetails/:notificationId" exact={true}>
               <NotificationDetails notifications={notifications} setNotifications={setNotifications} />
             </Route>
             <Route path="/notifications/addnotification" exact={true}>
               <AddNotification notifications={notifications} setNotifications={setNotifications} />
+            </Route>
+            <Route path="/notes" exact={true}>
+              <Notes notes={notes} setNotes={setNotes}/>
+            </Route>
+            <Route path="/notes/notedetails/:noteId" exact={true}>
+              <NoteDetails notes={notes} setNotes={setNotes} />
+            </Route>
+            <Route path="/notes/addnote" exact={true}>
+              <AddNote notes={notes} setNotes={setNotes} />
             </Route>
             <Route path="/" render={() => <Redirect to="/notifications" />} exact={true} />
           </IonRouterOutlet>
@@ -61,7 +73,7 @@ const App: React.FC = () => {
               <IonIcon icon={triangle} />
               <IonLabel>Erinnerungen</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
+            <IonTabButton tab="notes" href="/notes">
               <IonIcon icon={ellipse} />
               <IonLabel>Notizen</IonLabel>
             </IonTabButton>
