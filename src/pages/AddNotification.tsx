@@ -4,6 +4,7 @@ import { Plugins } from '@capacitor/core';
 import LocalNotificationCustom from '../model/LocalNotificationCustom';
 import { useHistory } from 'react-router';
 import { FieldTypes } from '../model/Fieldtypes';
+import { getNewNoteOrNotificationId } from '../functions/functions';
 
 const AddNotification: React.FC<{
   notifications: LocalNotificationCustom[],
@@ -35,7 +36,7 @@ const AddNotification: React.FC<{
     await Plugins.LocalNotifications.requestPermission()
 
     const notification = {      
-      id: getNewNotificationId(props.notifications),
+      id: getNewNoteOrNotificationId(props.notifications),
       title: userInput.title,
       body: userInput.body,
       schedule: { at: userInput.schedule?.at, repeats: userInput.schedule?.repeats, every: userInput.schedule?.every },
@@ -57,16 +58,6 @@ const AddNotification: React.FC<{
     setNotificationDateString('');
     setUserInput({title: '', body: '', id: 0, done: false});
     history.push("/notifications");
-  }
-
-  function getNewNotificationId(notifications: LocalNotificationCustom[]) {
-    let highestExistingId = 0;
-    notifications.forEach(notification => {
-      if (notification.id > highestExistingId) {
-        highestExistingId = notification.id
-      }
-    });
-    return highestExistingId + 1
   }
 
   return (

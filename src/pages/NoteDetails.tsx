@@ -14,7 +14,6 @@ const NoteDetails: React.FC<{
   const [startedDeletingNote, setStartedDeletingNote] = useState(false);
   const history = useHistory();
 
-  // todo: zusammenführen mit handleUserInput von Notifications?
   function handleUserInput(e: CustomEvent, fieldName: FieldTypes.BODY | FieldTypes.TITLE) {
     const newNoteArray = props.notes?.map(note => {
       if (note.id.toString() === noteId) {
@@ -26,7 +25,6 @@ const NoteDetails: React.FC<{
     Plugins.Storage.set({key: 'notes', value: JSON.stringify(newNoteArray)})
   }
 
-    // todo: zusammenführen mit deleteNotification?
   function deleteNote() {
     const newNoteArray: Note[] = [];
     props.notes.forEach(note => {

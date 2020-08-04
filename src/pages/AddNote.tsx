@@ -4,6 +4,7 @@ import { Plugins } from '@capacitor/core';
 import Note from '../model/Note';
 import { useHistory } from 'react-router';
 import { FieldTypes } from '../model/Fieldtypes';
+import { getNewNoteOrNotificationId } from '../functions/functions';
 
 const AddNote: React.FC<{
   notes: Note[],
@@ -13,7 +14,6 @@ const AddNote: React.FC<{
   const [userInput, setUserInput] = useState<Note>({title: '', body: '', id: 0});
   const history = useHistory();
 
-  // todo: zusammenführen mit handleUserInput von Notifications?
   function handleUserInput(e: CustomEvent, fieldName: FieldTypes) {
     if (e.detail && e.detail.value) {
       if (fieldName === FieldTypes.TITLE) {
@@ -26,7 +26,7 @@ const AddNote: React.FC<{
 
   async function addNote() {
     const note = {      
-      id: getNewNoteId(props.notes),
+      id: getNewNoteOrNotificationId(props.notes),
       title: userInput.title,
       body: userInput.body,
     };
@@ -38,17 +38,6 @@ const AddNote: React.FC<{
 
     setUserInput({title: '', body: '', id: 0});
     history.push("/notes");
-  }
-
-  // todo: zusammenführen mit getNewNotificationId?
-  function getNewNoteId(notifications: Note[]) {
-    let highestExistingId = 0;
-    notifications.forEach(notification => {
-      if (notification.id > highestExistingId) {
-        highestExistingId = notification.id
-      }
-    });
-    return highestExistingId + 1
   }
 
   return (

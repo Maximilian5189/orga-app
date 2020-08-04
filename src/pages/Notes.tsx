@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonText, IonList, IonItem, IonFab, IonFabButton, IonIcon } from '@ionic/react';
-import './Notes.css';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonText, IonList, IonItem, IonFab, IonFabButton, IonIcon } from '@ionic/react'
 import Note from '../model/Note';
 import { useHistory } from 'react-router';
 import { add } from 'ionicons/icons';
