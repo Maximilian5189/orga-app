@@ -14,3 +14,6 @@ Open browser on localhost:8100
 Prerequisites: Android Studio 
 
 (for details see https://ionicframework.com/docs/cli/commands/capacitor-run and https://capacitorjs.com/docs)
+
+## Re-build android version
+`ionic capacitor copy android`

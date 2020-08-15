@@ -72,4 +72,4 @@ const AddNote: React.FC<{
   );
 };
 
-export default AddNote;
+export default React.memo(AddNote);

@@ -104,4 +104,4 @@ const AddNotification: React.FC<{
   );
 };
 
-export default AddNotification;
+export default React.memo(AddNotification);

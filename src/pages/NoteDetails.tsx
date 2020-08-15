@@ -93,4 +93,4 @@ const NoteDetails: React.FC<{
   )
 }
 
-export default NoteDetails
+export default React.memo(NoteDetails)

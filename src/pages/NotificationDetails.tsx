@@ -128,4 +128,4 @@ const NotificationDetails: React.FC<{
   )
 }
 
-export default NotificationDetails
+export default React.memo(NotificationDetails)

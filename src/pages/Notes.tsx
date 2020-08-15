@@ -53,4 +53,4 @@ const Notes: React.FC<{
   );
 };
 
-export default Notes;
+export default React.memo(Notes);
