@@ -8,7 +8,7 @@
 
 Open browser on localhost:8100
 
-## Test android version
+## Test android version (builds app as well)
 `ionic capacitor run android`
 
 Prerequisites: Android Studio 
@@ -17,3 +17,6 @@ Prerequisites: Android Studio
 
 ## Re-build android version
 `ionic capacitor copy android`
+
+## Production mode
+`ionic capacitor run android --prod`
