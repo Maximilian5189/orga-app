@@ -1,5 +1,5 @@
 # orga-app
-
+This is an organisation app which I mainly created for myself as a learning project for React.  
 ## Live demo
 `https://orga-app.m-space.tech`
 
